@@ -60,6 +60,7 @@
       <x-admin.sidebar.admin-sidebar-users-links></x-admin.sidebar.admin-sidebar-users-links>
       @endif
       <x-admin.sidebar.authorzation-links></x-admin.sidebar.authorzation-links> 
+      <x-admin.sidebar.point-links></x-admin.sidebar.point-links>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

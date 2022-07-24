@@ -74,6 +74,7 @@
                             <th>Ngày Tạo</th>
                             <th>Ngày Cập Nhật</th>
                             <td>Delete</td>
+                            <td>Event</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -94,6 +95,11 @@
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="get" action="{{route('user.create-point', $user->id)}}">
+                                    <button class="btn btn">Add Event</button>
                                 </form>
                             </td>
                         </tr>

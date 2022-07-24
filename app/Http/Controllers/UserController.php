@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PointsRequest;
 use App\Http\Requests\UserRequest;
+use App\Point;
 use App\Role;
 use App\User;
+use App\UserPoint;
 use Illuminate\Http\Request;
 use DateTime;
 use App\Position;
@@ -125,4 +128,49 @@ class UserController extends Controller
         session()->flash('user-created-messages', 'User was created successfully');
         return redirect()->route('users.index');
     }
+
+    public function indexPoint(){
+
+        $points = Point::all();
+
+        return view('admin.event.index', ['points'=>$points]);
+
+    }
+
+    public function createPoint(){
+        return view('admin.event.create');
+    }
+
+    public function addPoint(PointsRequest $request){
+        $data = [
+            'points' => $request->points,
+            'event' => $request->event,
+            'type' => $request->type,
+        ];
+
+        Point::create($data);
+        
+        session()->flash('user-created-messages', 'User was created points successfully');
+        return redirect()->route('users.point.index');
+    }
+
+    public function editPoint($id){
+        $point = Point::find($id);
+        
+        return view('admin.event.edit',['point'=>$point]);
+    }
+
+    public function updatePoint(PointsRequest $request,$id){
+        $point = Point::find($id);
+        $point->update($request->all());
+        session()->flash('user-created-messages', 'User was created points successfully');
+        return redirect()->route('users.point.index');
+    }
+
+    public function deletePoint($id){
+        $point = Point::find($id)->delete();
+        session()->flash('user-created-messages', 'User was created points successfully');
+        return redirect()->route('users.point.index');
+    }
+
 }
