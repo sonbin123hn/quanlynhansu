@@ -61,11 +61,7 @@ class User extends Authenticatable
 
     public function getAvatarAttribute($value)
     {
-     if (strpos($value, 'https://') !== false || strpos($value, 'http://') !== false)
-     {
-      return $value;
-     }
-     return asset('storage/' . $value);
+        return $value;
     }
 
     public function permissions(){
@@ -88,4 +84,36 @@ class User extends Authenticatable
 
         return false;
     }
+
+    public function user_Department()
+    {
+        return $this->belongsTo('App\Department','department_id');
+    }
+
+    public function user_Position()
+    {
+        return $this->belongsTo('App\Position','position_id');
+    }
+
+    public static function searchUser($request = null, $limit = 10)
+    {
+        $where = [];
+        $name = $request->name;
+        $position_id = $request->position_id;
+        $department_id = $request->department_id;
+        if(!empty($name)){
+            $where[] = ['name', "like", '%' . mb_strtolower($name, 'UTF-8') . '%'];
+        }
+        if(!empty($position_id) && is_numeric($position_id)){
+            $where[] = ['position_id', "=", $position_id];
+        }
+        if(!empty($department_id && is_numeric($department_id))){
+            $where[] = ['department_id', "=",$department_id];
+        }
+        
+        $user = User::where($where)->orderBy('id', 'DESC')->paginate($limit);
+        return $user;
+    }
+
+
 }

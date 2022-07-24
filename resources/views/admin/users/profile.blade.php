@@ -4,75 +4,193 @@
     @if(session('user-updated-messages'))
         <div class="alert alert-success col-sm-6">{{session('user-updated-messages')}}</div>
     @endif
-    <div class="row">
-        <div class="col-sm-6">
+    <div class="row mb-5">
+        <div class="col-sm-12">
             <form method="post" action="{{route('user.profile.update', $user)}}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="id" value="{{ $user->id }}">
-                    <div class="mb-4">
-                            <img class="img-profile rounded-circle" style="height:100px" src="{{$user->avatar}}">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="id" value="{{ $user->id }}">
+                <div class="form-group">
+                    <label>Avatar</label>
+                    <div class="row">
+                        <div class="clo-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Upload hình</span>
+                                </div>
+                                <div>
+                                    <input type="file" name="avatar" class="form-control hidden">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clo-md-6">
+                            <div class="form-group">
+                                <div class="border input-group">
+                                    <img src="{{ asset('upload/user') }}/{{$user->avatar}}" alt="Ảnh Hiện tại" width="100px" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                            <input type="file" name="avatar">
-                            @error('avatar')
+                    @error('avatar')
+                    <div class="invalid-feedback">{{$message}}</div>
+                    @enderror
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" id="username" value="{{ $user->username}}">
+                            @error('username')
                             <div class="invalid-feedback">{{$message}}</div>
                             @enderror
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text"
-                            name="username"
-                            class="form-control @error('username') is-invalid @enderror"
-                            id="username"
-                            value="{{$user->username}}">
-                        @error('username')
-                        <div class="invalid-feedback">{{$message}}</div>
-                        @enderror
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="name">Họ và tên</label>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ $user->name}}">
+                            @error('name')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text"
-                                name="name"
-                                class="form-control @error('name') is-invalid @enderror"
-                                id="name"
-                                value="{{$user->name}}">
-                        @error('name')
-                        <div class="invalid-feedback">{{$message}}</div>
-                        @enderror
+                </div>
+                <div class="row">  
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{$user->email}}">
+                            @error('email')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="text"
-                                name="email"
-                                class="form-control @error('email') is-invalid @enderror"
-                                id="email"
-                                value="{{$user->email}}">
-                        @error('email')
-                        <div class="invalid-feedback">{{$message}}</div>
-                        @enderror
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="birthday">Ngày sinh</label>
+                            @php
+                                $date=date_create($user->birthday);
+                            @endphp
+                            <input type="date" name="birthday" class="form-control @error('birthday') is-invalid @enderror" id="birthday" value="{{date_format($date,'Y-m-d') ?? ''}}">
+                            @error('birthday')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password"
-                                name="password"
-                                class="form-control @error('password') is-invalid @enderror"
-                                id="password">
-                        @error('password')
-                        <div class="invalid-feedback">{{$message}}</div>
-                        @enderror
+                </div>
+                <div class="row">  
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="number" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" value="{{ $user->phone }}">
+                            @error('phone')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="password-confirmation">Confirm Password</label>
-                        <input type="password"
-                                name="password_confirmation"
-                                class="form-control @error('password_confirmation') is-invalid @enderror"
-                                id="password-confirmation">
-                        @error('password_confirmation')
-                        <div class="invalid-feedback">{{$message}}</div>
-                        @enderror
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="address">Địa chỉ</label>
+                            <input type="text" name="address" class="form-control @error('address') is-invalid @enderror" id="address" value="{{ $user->address }}">
+                            @error('address')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="place_of_origin">Quê quán</label>
+                            <input type="text" name="place_of_origin" class="form-control @error('place_of_origin') is-invalid @enderror" id="place_of_origin" value="{{ $user->place_of_origin }}">
+                            @error('place_of_origin')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="ethnicity">Dân tộc</label>
+                            <input type="text" name="ethnicity" class="form-control @error('ethnicity') is-invalid @enderror" id="ethnicity" value="{{ $user->ethnicity }}">
+                            @error('ethnicity')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="cmnd">Sô CMND</label>
+                            <input type="number" name="cmnd" class="form-control @error('cmnd') is-invalid @enderror" id="cmnd" value="{{ $user->cmnd }}">
+                            @error('cmnd')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="sobhxh">Số BHXH</label>
+                            <input type="number" name="sobhxh" class="form-control @error('sobhxh') is-invalid @enderror" id="sobhxh" value="{{ $user->sobhxh }}">
+                            @error('sobhxh')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="sel1">Chức vụ:</label>
+                            <select class="form-control" id="position_id" name="position_id">
+                                <option>Chức vụ</option>
+                                @foreach($positions as $valuePositions)
+                                    @if($user->position_id == $valuePositions->id)
+                                        <option value="{{$valuePositions->id}}" selected>{{$valuePositions->name}}</option>
+                                    @else
+                                        <option value="{{$valuePositions->id}}">{{$valuePositions->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="sel1">Phòng ban:</label>
+                            <select class="form-control" id="department_id" name="department_id">
+                                <option>Phòng ban</option>
+                                @foreach($departments as $valueDepartments)
+                                    @if($user->department_id == $valueDepartments->id)
+                                        <option value="{{$valueDepartments->id}}" selected>{{$valueDepartments->name}}</option>
+                                    @else
+                                        <option value="{{$valueDepartments->id}}">{{$valueDepartments->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password">
+                            @error('password')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="password-confirmation">Confirm Password</label>
+                            <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" id="password-confirmation">
+                            @error('password_confirmation')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>

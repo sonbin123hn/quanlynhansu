@@ -1,3 +1,7 @@
+<style>
+    .dataTables_length{display: none;}
+    #dataTable_filter{display: none;}
+</style>
 <x-admin-master>
 
     @section('content')
@@ -14,29 +18,75 @@
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Users</h6>
             </div>
+            <form action="{{route('users.index')}}" method="get" class="ml-3">
+                <label for="sel1">Search:</label>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div id="example_filter" class="dataTables_filter"><input type="search" name="name" class="form-control form-control-sm" value="{{$request->name}}" placeholder="Tên nhân viên" aria-controls="example"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <select class="form-control" id="position_id" name="position_id">
+                                <option>Chức vụ</option>
+                                @foreach($positions as $valuePositions)
+                                    @if($request->position_id == $valuePositions->id)
+                                        <option value="{{$valuePositions->id}}" selected>{{$valuePositions->name}}</option>
+                                    @else
+                                        <option value="{{$valuePositions->id}}">{{$valuePositions->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <select class="form-control" id="department_id" name="department_id">
+                                <option>Phòng ban</option>
+                                @foreach($departments as $valueDepartments)
+                                    @if($request->department_id == $valueDepartments->id)
+                                        <option value="{{$valueDepartments->id}}" selected>{{$valueDepartments->name}}</option>
+                                    @else
+                                        <option value="{{$valueDepartments->id}}">{{$valueDepartments->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>STT</th>
                             <th>Username</th>
-                            <th>Avatar</th>
-                            <th>Name</th>
-                            <th>Registered date</th>
-                            <th>Updated profile date</th>
+                            <th>Ảnh</th>
+                            <th>Họ Tên</th>
+                            <th>Phòng Ban</th>
+                            <th>Chức vụ</th>
+                            <th>Ngày Tạo</th>
+                            <th>Ngày Cập Nhật</th>
                             <td>Delete</td>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($users as $user)
+                        @foreach($users as $key => $user)
                         <tr>
-                            <td>{{$user->id}}</td>
+                            <td>{{$key+1}}</td>
                             <td><a href="{{route('user.profile.show', $user->id)}}">{{$user->username}}</a></td>
                             <td>
-                                <img height="50px" src="{{$user->avatar}}" alt="">
+                                <img height="50px" src="{{asset('upload/user') }}/{{$user->avatar}}" alt="">
                             </td>
                             <td>{{$user->name}}</td>
+                            <td>{{$user->user_Department->name ?? 'chưa cập nhật'}}</td>
+                            <td>{{$user->user_Position->name ?? 'chưa cập nhật'}}</td>
                             <td>{{$user->created_at->diffForhumans()}}</td>
                             <td>{{$user->updated_at->diffForhumans()}}</td>
                             <td>
