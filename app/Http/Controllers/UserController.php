@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use DateTime;
 use App\Position;
 use App\Department;
+use DB;
 class UserController extends Controller
 {
     public function index(Request $request){
@@ -171,6 +172,53 @@ class UserController extends Controller
         $point = Point::find($id)->delete();
         session()->flash('user-created-messages', 'User was created points successfully');
         return redirect()->route('users.point.index');
+    }
+
+    public function showPointUser(User $user,Request $request){
+        $where = [];
+        $where[] = ['user_id', '=',$user->id];
+        $dateStart = '';
+        $dateEnd = '';
+        if(!empty($request->dateStart) && !empty($request->dateEnd)){
+            $dateStart = new DateTime($request->dateStart);
+            $dateStart = $dateStart->format('Y-m-d');
+
+            $dateEnd = new DateTime($request->dateEnd);
+            $dateEnd = $dateEnd->format('Y-m-d');
+            $where[] = ['user_points.created_at', '>=',$dateStart];
+            $where[] = ['user_points.created_at', '<=',$dateEnd];
+        }
+        $points = Point::all();
+        $userPoints = DB::table('user_points')->select('*', 'user_points.created_at as dateCreatePoint','user_points.id as userPointID')->leftJoin('points', 'user_points.point_id', '=', 'points.id')
+        ->where($where)->orderBy('user_points.id', 'DESC')->paginate(10);
+        return view('admin.users.userPoint', [
+            'user'=> $user,
+            'points'=> $points,
+            'userPoints' => $userPoints,
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd
+        ]);
+    }
+
+    public function updatePointUser(User $user,Request $request){
+        $requestAll = $request->all();
+        foreach($requestAll as $key => $value) {
+            if(is_numeric($key)){
+                $data = [
+                    'point_id' => $value['pointID'],
+                    'user_id' => $user->id,
+                ];
+                UserPoint::create($data);
+            }
+        }
+        session()->flash('user-created-point-messages', 'Cập nhật điểm thành công');
+        return back();
+    }
+
+    public function deletePointUser($id){
+        UserPoint::find($id)->delete();
+        session()->flash('user-created-point-messages', 'Xóa điểm thành công');
+        return back();
     }
 
 }

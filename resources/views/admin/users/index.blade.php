@@ -74,7 +74,7 @@
                             <th>Ngày Tạo</th>
                             <th>Ngày Cập Nhật</th>
                             <td>Delete</td>
-                            <td>Event</td>
+                            <td>Cập Nhật Điểm</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -98,8 +98,8 @@
                                 </form>
                             </td>
                             <td>
-                                <form method="get" action="{{route('user.create-point', $user->id)}}">
-                                    <button class="btn btn">Add Event</button>
+                                <form method="get" action="{{route('user.show-point', $user)}}">
+                                    <button class="btn btn-primary">Cập Nhật Điểm</button>
                                 </form>
                             </td>
                         </tr>

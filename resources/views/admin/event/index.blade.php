@@ -1,15 +1,15 @@
+<style>
+    .dataTables_length{display: none;}
+    #dataTable_filter{display: none;}
+</style>
 <x-admin-master>
-
     @section('content')
-
         <h1>Points</h1>
-
         @if(session('point-deleted'))
             <div class="alert alert-danger">{{session('point-deleted')}}</div>
         @elseif (session('point-created-messages'))
             <div class="alert alert-success">{{session('point-created-messages')}}</div>
         @endif
-
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">points</h6>
@@ -20,31 +20,27 @@
                         <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Event</th>
-                            <th>Point</th>
-                            <th>type</th>
-                            <th>Registered date</th>
-                            <th>Updated Event date</th>
-                            <th>Update Event</th>
+                            <th>Sự Kiện</th>
+                            <th>Điểm</th>
+                            <th>Loại Điểm</th>
+                            <th>Cập nhật Sự Kiện</th>
                             <th>Delete</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($points as $point)
+                        @foreach($points as $key => $point)
                         <tr>
-                            <td>{{$point->id}}</td>
+                            <td>{{$key+1}}</td>
                             <td>{{$point->event}}</td>
                             <td>{{$point->points}}</td>
                             @if($point->type == 0)
-                                <td>minus point</td>
+                                <td>Điểm Trừ</td>
                             @else
-                                <td>plus mark</td>
+                                <td>Điểm Cộng</td>
                             @endif
-                            <td>{{$point->created_at->diffForhumans()}}</td>
-                            <td>{{$point->updated_at->diffForhumans()}}</td>
                             <td>
                                 <form method="get" action="{{route('user.edit-point', $point->id)}}">
-                                    <button class="btn btn-primary">update Event</button>
+                                    <button class="btn btn-primary">Cập nhật sự kiện</button>
                                 </form>
                             </td>
                             <td>
