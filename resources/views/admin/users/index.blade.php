@@ -83,7 +83,7 @@
                             <td>{{$key+1}}</td>
                             <td><a href="{{route('user.profile.show', $user->id)}}">{{$user->username}}</a></td>
                             <td>
-                                <img height="50px" src="{{asset('upload/user') }}/{{$user->avatar}}" alt="">
+                                <img height="50px" src="{{asset('upload/user') }}/{{$user->avatar ?? 'https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png'}}" alt="">
                             </td>
                             <td>{{$user->name}}</td>
                             <td>{{$user->user_Department->name ?? 'chưa cập nhật'}}</td>
